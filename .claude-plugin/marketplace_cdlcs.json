@@ -1,0 +1,30 @@
+{
+    "name": "marketplace_cdlcs",
+    "owner": {
+        "name": "Cdlcs",
+        "url": "https://github.com/Cesardlcs/marketplace_cdlcs"
+    },
+    "metadata": {
+        "description": "Plugins para desarrollo en Microsoft Power Platform, Dataverse, Dynamics 365 y Salesforce por Fran"
+    },
+    "plugins": [
+        {
+            "name": "BO-Solutioning",
+            "source": "./plugins/BO-Solutioning",
+            "description": "Test",
+            "category": "development",
+            "tags": [
+                "power platform",
+                "dataverse",
+                "dynamics 365",
+                "pcf",
+                "power automate",
+                "power pages",
+                "model-driven apps",
+                "alm",
+                "cdlcs",
+                "microsoft"
+            ]
+        }
+    ]
+}
