@@ -1,0 +1,77 @@
+{
+  "engagement": "v9",
+  "bo": "[BO] 2.1 Account management / 2.2 Asset Management",
+  "jiraObjective": "DDP-59197",
+  "statusFilter": [
+    "SPECIFIED"
+  ],
+  "reviewedHld": "output/v9/v9-HLD.md",
+  "reviewDate": "2026-04-07",
+  "coverageStatus": "PASS",
+  "inScopeAcSourceCount": 19,
+  "hldMatchedAcCount": 19,
+  "missingAcCount": 0,
+  "extraAcCount": 1,
+  "sourceInventory": {
+    "DDP-59199": [
+      "AC-FR-1",
+      "AC-FR-2",
+      "AC-FR-3",
+      "AC-FR-4",
+      "AC-FR-5"
+    ],
+    "DDP-59540": [
+      "AC1.1",
+      "AC1.2",
+      "AC1.3",
+      "AC2",
+      "AC3"
+    ],
+    "DDP-63819": [
+      "AC1.1",
+      "AC1.2",
+      "AC1.3",
+      "AC2.1",
+      "AC2.2",
+      "AC3.1",
+      "AC3.2",
+      "AC4.1",
+      "AC5.1"
+    ]
+  },
+  "missingAc": [],
+  "extraAc": [
+    {
+      "ddp": "DDP-59540",
+      "ac": "AC-Comment-01",
+      "classification": "supplemental-governance-row",
+      "reason": "Derived from Jira comments and retained as a governance note, not counted as source AC."
+    }
+  ],
+  "traceability": [
+    {"sourceDdp": "DDP-59199", "sourceAc": "AC-FR-1", "hldFound": true, "hldSection": "Appliance Creation and Validation"},
+    {"sourceDdp": "DDP-59199", "sourceAc": "AC-FR-2", "hldFound": true, "hldSection": "Appliance Creation and Validation"},
+    {"sourceDdp": "DDP-59199", "sourceAc": "AC-FR-3", "hldFound": true, "hldSection": "Appliance Creation and Validation"},
+    {"sourceDdp": "DDP-59199", "sourceAc": "AC-FR-4", "hldFound": true, "hldSection": "Post-Creation Visibility and Editing"},
+    {"sourceDdp": "DDP-59199", "sourceAc": "AC-FR-5", "hldFound": true, "hldSection": "Post-Creation Visibility and Editing"},
+    {"sourceDdp": "DDP-59540", "sourceAc": "AC1.1", "hldFound": true, "hldSection": "Contract List Visibility and Ordering (Table-Agnostic Pending DAB)"},
+    {"sourceDdp": "DDP-59540", "sourceAc": "AC1.2", "hldFound": true, "hldSection": "Contract List Visibility and Ordering (Table-Agnostic Pending DAB)"},
+    {"sourceDdp": "DDP-59540", "sourceAc": "AC1.3", "hldFound": true, "hldSection": "Contract List Visibility and Ordering (Table-Agnostic Pending DAB)"},
+    {"sourceDdp": "DDP-59540", "sourceAc": "AC2", "hldFound": true, "hldSection": "Contract List Visibility and Ordering (Table-Agnostic Pending DAB)"},
+    {"sourceDdp": "DDP-59540", "sourceAc": "AC3", "hldFound": true, "hldSection": "Contract Detail and Expiry Readiness"},
+    {"sourceDdp": "DDP-63819", "sourceAc": "AC1.1", "hldFound": true, "hldSection": "Home Connect Field Visibility and Status Display"},
+    {"sourceDdp": "DDP-63819", "sourceAc": "AC1.2", "hldFound": true, "hldSection": "Home Connect Field Visibility and Status Display"},
+    {"sourceDdp": "DDP-63819", "sourceAc": "AC1.3", "hldFound": true, "hldSection": "Home Connect Field Visibility and Status Display"},
+    {"sourceDdp": "DDP-63819", "sourceAc": "AC2.1", "hldFound": true, "hldSection": "Home Connect Appliance ID Display Governance"},
+    {"sourceDdp": "DDP-63819", "sourceAc": "AC2.2", "hldFound": true, "hldSection": "Home Connect Appliance ID Display Governance"},
+    {"sourceDdp": "DDP-63819", "sourceAc": "AC3.1", "hldFound": true, "hldSection": "Home Connect Status Rendering and Visibility Control"},
+    {"sourceDdp": "DDP-63819", "sourceAc": "AC3.2", "hldFound": true, "hldSection": "Home Connect Status Rendering and Visibility Control"},
+    {"sourceDdp": "DDP-63819", "sourceAc": "AC4.1", "hldFound": true, "hldSection": "Home Connect Status Rendering and Visibility Control"},
+    {"sourceDdp": "DDP-63819", "sourceAc": "AC5.1", "hldFound": true, "hldSection": "Home Connect Upstream Value Control"}
+  ],
+  "notes": [
+    "BO Confluence page metadata was reachable, but full BO content extraction was not available through the current retrieval path in this run.",
+    "Jira objective and included linked subdemands were used as the authoritative detailed AC source.",
+    "Excluded subdemands: DDP-59508 and DDP-59528 because status was On Hold and outside the active filter."
+  ]
+}
