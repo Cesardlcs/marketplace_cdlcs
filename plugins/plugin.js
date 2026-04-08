@@ -1,4 +1,4 @@
 {
-  "name"; "BO_Solutioning",
-  "skills"; "test-skill/"
+  "name": "BO_Solutioning",
+  "skills": "test-skill/"
 }
