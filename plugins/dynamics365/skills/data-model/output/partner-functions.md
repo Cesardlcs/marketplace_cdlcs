@@ -3,9 +3,11 @@
 
 ## 1. Scenario Context
 
-A Partner Function links **Account (or Contact?) + Functional Location + Partner Function Type** to a **Case**.
+A Partner Function links **Account + Functional Location + Partner Function Type** to a **Case**.
 
-Partner Function values:
+Partner Functions are standardized role labels used in CC, Field Service, and Finance to clearly define responsibilities, communication paths, operational execution, and financial accountability within a specific business transaction. In this case, via Case operations.
+
+Current Partner Function values:
 - Sold-to
 - Caller
 - Bill-to
@@ -43,7 +45,7 @@ Partner Function values:
 | `N/A (conceptual candidate)` | Conceptual candidate (not existing relationship) | `incident` ↔ `connection` | Rejected | Case to partner function flow driven process. Informal relationship nature |
 | `N/A (conceptual candidate)` | Conceptual candidate (not existing relationship) | `incident` ↔ `customeraddress` | Rejected | Customer master data. Case-scoped transaction semantics |
 
-> No native relationship exists between `bshcs_billingfunctionallocation` and `contact`.
+> No native relationship exists between `bshcs_billingfunctionallocation` and `contact`. Case already has relationchip with Contact.
 
 
 
@@ -75,7 +77,7 @@ Business flow alignment:
 
 | Table | Why it looked viable | Why it was rejected for this process |
 |-------|----------------------|------------------------------------|
-| `connection` | Already supports linking many record types and has role-based semantics through connection roles. | 1. `connection` is intended for informal/ad hoc relationships, while Partner Functions are process-driving data (billing, routing, notifications). <p> 2. The Case -> Partner Function pattern needs  assignment rows with required `account` + `functional location` + `partner function` values; `connection` would require extra handling via roles and more complex filtering. <p> 3. Governance cost is higher for operations and reporting because business logic depends on role metadata rather than typed table columns. |
+| `connection` | Already supports linking many record types and has role-based semantics through connection roles. | 1. `connection` is intended for informal/ad hoc relationships, while Partner Functions are process-driving data (billing, routing, notifications). <p> 2. The Case -> Partner Function pattern needs  assignment rows with required `account` + `functional location` + `partner function` values; `connection` would require extra handling via roles and more complex filtering. <p> 3. Governance cost is higher for operations and reporting because business logic depends on role metadata rather than explicit table columns. |
 | `customeraddress` | Has Bill To / Ship To concepts and can store address details tied to customer records. | 1. Scope mismatch: `customeraddress` is customer master address data, not case-scoped assignment rows. <p> 2. Missing partner-function semantics: it does not model Sold-to, Caller, Extra Contact, Payer in the same role framework.  <p> 3. Does not represent the required assignment triplet (`account` + `functional location` + partner function) as a case-owned relation. <p> 4. Using it for case transactions would overload a master-data table with process-transactions. |
 
 Fit/gap check used for rejection:
@@ -104,18 +106,6 @@ Fit/gap check used for rejection:
 | `bshcs_partnerfunction` | Partner Function | Choice | Yes |
 | `bshcs_name` | Name | Text | No |
 
-#### Update choice: `bshcs_partnerfunction`
-
-Current options:
-- Bill-to (0)
-- Sold-to (1)
-- Payer (2)
-
-Add options:
-- Caller
-- Ship-to
-- Extra Contact
-
 
 #### Relationships
 
@@ -127,7 +117,7 @@ Add options:
 
 #### Business rules
 
-1. Partner rows are created from the Case using the existing custom 1:N relationship.
+1. Partner Function rows are created from the Case using the existing custom 1:N relationship.
 2. Multiple partner rows per Case are allowed.
 3. `bshcs_accountid` and `bshcs_functionallocationid` remain required on each partner row.  
 

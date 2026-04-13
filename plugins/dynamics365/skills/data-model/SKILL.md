@@ -219,6 +219,27 @@ This section is **mandatory** and must be included in every generated data model
 
 Provide a short conclusion that explicitly ties the rejected options back to the selected architecture and business process.
 
+### Why This Architecture Works (Fixed Component - Mandatory)
+
+Provide **strong, multi-dimensional justifications** for the selected architecture design. Cover at least these dimensions:
+
+- **Development & cost efficiency**: Does reusing tables eliminate custom plugins, custom forms, or data migration? Does the design avoid unnecessary complexity?
+- **User experience & process alignment**: Does the architecture match the actual business workflow? Does it leverage built-in Dynamics patterns (subgrid, lookup, choice fields)?
+- **Data integrity & governance**: Does the selected relationship type enforce referential constraints automatically? How does it support audit trails and compliance?
+- **Query, reporting & maintainability**: Are the semantic and business-logic implications clear? Can operations and BI teams write straightforward queries without custom SQL?
+- **Scalability & performance**: Will the design handle the expected data volume without degradation? Are Dataverse native indexing and cardinality appropriate?
+- **Backward compatibility**: Does the design preserve existing data and workflows, or require migration?
+
+**Example structure** (provide 6-8 points like these):
+1. **Eliminates development cost**: Reuses existing table [X] and relationship [Y]—no new plugins or custom forms required.
+2. **Native user experience**: Leverages built-in [subgrid/lookup/choice] pattern; no custom apps required.
+3. **Inherent referential integrity**: [Relationship type] enforces required associations automatically.
+4. **Query and reporting simplicity**: [Reason why queries are straightforward and performance optimized].
+5. **Full audit trail compliance**: Standard Dataverse audit logs capture all metadata.
+6. **Backward compatibility**: Existing data continues without migration.
+7. **Simplified semantic model**: [Reason why structure is maintainable and business-clear].
+8. **Scalability and performance**: [Reason native indexing and cardinality handle expected volume].
+
 ### ER Diagram
 
 ```mermaid
@@ -249,7 +270,8 @@ After creating the model, automatically generate:
 
 Provide:
 - A list of proposed new tables and reused existing tables. Give a brief justification for each reused standard table, explaining how it fits the requirements without distorting its original purpose.
-- Strong arguments and validations for the decisions made, especially if proposing reuse of standard tables. Look for info using the microsoftdocs-mcp server
-- A relationship summary that explicitly lists the relevant existing `1:N`, `N:1`, and `N:N` relationships reviewed, including relationship schema names when they materially affect the recommendation
-- The mandatory fixed components from Step 5 for rejected table options: viability rationale, exact rejection rationale, fit/gap comparison matrix, and rejection conclusion tied to the selected architecture
+- **Strong multi-dimensional architectural justifications** (drawn directly from Step 5's "Why This Architecture Works" section) covering: development cost/efficiency, user experience and process alignment, data integrity and governance, query/reporting maintainability, scalability and performance, backward compatibility, and semantic clarity. These arguments must directly address the business context and why alternatives were rejected.
+- Research and validation of the decisions made, especially if proposing reuse of standard tables or native N:N relationships. Consult the microsoftdocs-mcp server and Dataverse relationship metadata to confirm best practices.
+- A relationship summary that explicitly lists the relevant existing `1:N`, `N:1`, and `N:N` relationships reviewed, including relationship schema names when they materially affect the recommendation. Include conceptual rejected candidates even if no current relationship exists.
+- The mandatory fixed components from Step 5 for rejected table options: viability rationale, exact rejection rationale, fit/gap comparison matrix, and rejection conclusion tied to the selected architecture and business process.
 - The final ER diagram in Mermaid format.
