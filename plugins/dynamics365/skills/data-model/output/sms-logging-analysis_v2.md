@@ -10,9 +10,8 @@
 
 Because `msdyn_ocoutboundmessage` is a managed/system table with limited extensibility in this environment, the strategy is to avoid future rework and supportability risk.
 
-1. Use a custom table (`bshcs_smslog`) as the primary system of record for SMS logging.
-2. Use the lightweight channel-facing record in `msdyn_ocoutboundmessage` when Omnichannel timeline visibility is needed. This indicates general info is available to agent, not technical info.
-3. Keep all extended/technical logging in `bshcs_smslog` only.
+1. Use a custom activity table (`bshcs_smslog`) as the primary system of record for SMS logging.
+2. Keep all extended/technical logging in `bshcs_smslog` only.
 
 ---
 
@@ -54,7 +53,7 @@ If the scope expects additional diagnostics, provider metadata, or compliance fi
 | Logical Name | Type | Future-fit for likely extra info | Verdict |
 |---|---|---|---|
 | `bshcs_smslog` | Custom (new) | Strong | **Selected as primary table** |
-| `msdyn_ocoutboundmessage` | Standard managed | Partial | Reuse as optional channel/timeline projection |
+| `msdyn_ocoutboundmessage` | Standard managed | Partial | Reuse as optional channel/timeline projection if needed |
 | `activitypointer` | Standard | Weak | Rejected |
 
 ---
@@ -73,56 +72,44 @@ Reason:
 
 1. Trigger flow writes SMS record to `bshcs_smslog`.
 2. Router/callback flows update record with delivery and technical details.
-3. Use `msdyn_ocoutboundmessage` for Omnichannel UI/timeline needs.
-4. Keep stable cross-reference between both records.
 
 ---
 
 ## 5. Recommended Dataverse Design
 
-### 5.1 Primary table: `bshcs_smslog` (custom)
+### 5.1 Primary table: `bshcs_smslog` (activity - custom)
 
-**Type**: Custom table (new)  
-**Ownership**: Organization-owned (recommended for system-generated logs)
+**Type**: Custom activity table (new)  
+**Ownership**: User or Team (default ownership for activity table)
 
-#### Core columns (current + future-safe)
+#### Core columns
 
 | Column (Logical Name) | Type | Purpose |
 |---|---|---|
-| `bshcs_name` | SingleLine.Text | Human-readable log reference |
-| `bshcs_incidentid` | Lookup (`incident`) | Case context |
-| `bshcs_contactid` | Lookup (`contact`) | Consumer context |
-| `bshcs_workorderid` | Lookup (`msdyn_workorder`) | Appointment context (optional) |
-| `bshcs_recipientphone` | SingleLine.Text | Recipient MSISDN |
-| `bshcs_senderid` | SingleLine.Text | Sender identity (for example BSH-Service) |
-| `bshcs_messagebody` | MultiLine.Text | Final rendered SMS text |
-| `bshcs_status` | Choice | Pending, Sent, Delivered, Failed, Bounced |
-| `bshcs_senton` | DateTime | Send timestamp |
-| `bshcs_finalizedon` | DateTime | Final status timestamp |
-| `bshcs_provider` | Choice/Text | Provider name |
-| `bshcs_providermessageid` | SingleLine.Text | Gateway correlation ID |
-| `bshcs_httpstatuscode` | WholeNumber | Transport response code |
-| `bshcs_errormessage` | MultiLine.Text | Failure reason |
-| `bshcs_requestpayload` | MultiLine.Text | Provider request payload |
-| `bshcs_responsepayload` | MultiLine.Text | Provider callback/response payload |
-| `bshcs_retrycount` | WholeNumber | Retry attempts |
-| `bshcs_correlationid` | SingleLine.Text | End-to-end correlation |
-| `bshcs_ocoutboundmessageid` | SingleLine.Text | Optional link to system table record |
+| `activityid` | GUID | Primary key |
+| `subject` | SingleLine.Text | Human-readable SMS log title/reference |
+| `description` | MultiLine.Text | Message body and/or technical notes |
+| `regardingobjectid` | Lookup (polymorphic) |
+| `bshcs_externalid` | SingleLine.Text |
+| `customers` | Customer (`account`/`contact`) | Recipient business party context |
+| `to` | Activity party lookup | SMS recipient party |
+| `from` | Activity party lookup | SMS sender party |
+| `senton` | DateTime | Send timestamp |
+| `deliverylastattemptedon` | DateTime | Latest delivery attempt timestamp |
+| `statecode` | State | Open, Completed, Canceled, Scheduled |
+| `statuscode` | Status | Customizable |
+| `ownerid` | Owner | Record owner |
+| `createdon` | DateTime | Created timestamp |
+| `modifiedon` | DateTime | Last updated timestamp |
 
-### 5.2 Supporting table: `msdyn_ocoutboundmessage` (system)
 
-Use only for:
-1. Omnichannel channel/timeline visibility.
-2. Standard channel status exposure.
-
-Do not depend on it as the long-term technical log if future extra fields are expected.
-
-### 5.3 Relationship model
+### 5.2 Relationship model
 
 | Relationship | Type | Status |
 |---|---|---|
-| `bshcs_smslog` -> `incident` | N:1 | Create |
-| `bshcs_smslog` -> `contact` | N:1 | Create |
+| `bshcs_smslog.regardingobjectid` | N:1 |Available |
+| `activity_pointer_bshcs_testsms` | N:1 | Available |
+| `bshcs_testsms_systemuser_owninguser` | N:1 | Available |
 
 
 ---
@@ -169,7 +156,7 @@ Trigger migration to custom-primary strategy immediately when any of these appea
 
 ## 8. System Table Field Inventory (Reference)
 
-`msdyn_ocoutboundmessage` currently exposes these key usable columns for SMS scenarios:
+`msdyn_ocoutboundmessage` currently exposes these key usable columns:
 - `subject`
 - `description`
 - `msdyn_ocmessagetext`
@@ -194,10 +181,9 @@ Trigger migration to custom-primary strategy immediately when any of these appea
 
 ## 9. Final Recommendation
 
-Given business expectation that additional info is likely, the recommended approach is:
+Given business expectation that additional info is likely, and to avoid system internal field usage, the recommended approach is:
 
 1. **Primary**: `bshcs_smslog` for canonical SMS data and future growth.
-2. **Additional**: `msdyn_ocoutboundmessage` projection for Omnichannel/timeline UX.
-3. Keep all custom/technical diagnostics in custom table only.
+2. Keep all custom/technical diagnostics in custom table only.
 
 This approach is the most supportable, upgrade-safe, and lowest-risk path for evolving SMS requirements.
