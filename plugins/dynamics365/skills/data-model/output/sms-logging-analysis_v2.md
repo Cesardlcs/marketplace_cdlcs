@@ -53,7 +53,7 @@ If the scope expects additional diagnostics, provider metadata, or compliance fi
 | Logical Name | Type | Future-fit for likely extra info | Verdict |
 |---|---|---|---|
 | `bshcs_smslog` | Custom (new) | Strong | **Selected as primary table** |
-| `msdyn_ocoutboundmessage` | Standard managed | Partial | Reuse as optional channel/timeline projection if needed |
+| `msdyn_ocoutboundmessage` | Standard managed | Partial | Reuse as channel/timeline projection |
 | `activitypointer` | Standard | Weak | Rejected |
 
 ---
@@ -63,8 +63,7 @@ If the scope expects additional diagnostics, provider metadata, or compliance fi
 ### Selected primary table: `bshcs_smslog`
 
 Reason:
-1. Future additional fields are likely
- needed.
+1. Future additional fields are likely needed.
 2. Managed/system table constraints block safe expansion.
 3. Custom table keeps design supportable and upgrade-safe using documented customization tools.
 
@@ -72,6 +71,7 @@ Reason:
 
 1. Trigger flow writes SMS record to `bshcs_smslog`.
 2. Router/callback flows update record with delivery and technical details.
+3. A process is needed to create `msdyn_ocoutboundmessage` with the "user-fiendly information".
 
 ---
 
@@ -107,9 +107,10 @@ Reason:
 
 | Relationship | Type | Status |
 |---|---|---|
-| `bshcs_smslog.regardingobjectid` | N:1 |Available |
-| `activity_pointer_bshcs_testsms` | N:1 | Available |
-| `bshcs_testsms_systemuser_owninguser` | N:1 | Available |
+| `bshcs_smslog.regardingobjectid` | N:1 | Custom |
+| `bshcs_smslog_msdyn_ocoutboundmessage` | 1:1 |Custom |
+| `activity_pointer_bshcs_smslog` | N:1 | Custom |
+| `bshcs_smslog_systemuser_owninguser` | N:1 | Custom |
 
 
 ---
@@ -185,5 +186,6 @@ Given business expectation that additional info is likely, and to avoid system i
 
 1. **Primary**: `bshcs_smslog` for canonical SMS data and future growth.
 2. Keep all custom/technical diagnostics in custom table only.
+3. Use `msdyn_ocoutboundmessage` as secondary table for standard visualization in timeline activities. IMPORTANT: status in timeline won't represent the true value as the standatd table is limited in this field customization as well.
 
 This approach is the most supportable, upgrade-safe, and lowest-risk path for evolving SMS requirements.
