@@ -102,14 +102,14 @@ Two OOB address blocks `address1_*` and `address2_*`. Note: **primary address is
 | Contact ID | `contactid` | GUID PK | Y | R | System-generated |
 | First Name | `firstname` | NVARCHAR(50) | Y | R/W | |
 | Last Name | `lastname` | NVARCHAR(50) | Y | R/W | |
-| Title | `salutation` | NVARCHAR(100) | N | R/W | Blank, Mr, Mrs, Miss, Ms, Mx, Dr |
-| Name Supplement | `bshcs_namesupplement` | CHOICE | N | R/W | Prof, Rev, Sir, Dame, Lord, Lady, Capt |
+| Title | `bshcs_titleid` | CHOICE | N | R/W | Country-specific. Definition table vs dropdown pending. |
+| Name Supplement | `bshcs_namesupplement` | CHOICE | N | R/W | Country-specific. Definition table vs dropdown pending. |
 | Account Name | `parentcustomerid` | CUSTOMER → account | N | R/W | Linked account |
 | Mobile Phone | `mobilephone` | PHONE(50) | N* | R/W | *One of mobile/email/phone required at CC creation |
 | Email Address | `emailaddress1` | EMAIL(100) | N* | R/W | |
 | Telephone | `telephone1` | PHONE(50) | N* | R/W | |
 | Contact Method | `preferredcontactmethodcode` | CHOICE | N | R/W | Any/Email/Phone/Fax/Mail |
-| Opt In | `bshcs_optin` | BIT | N | R/W | Marketing opt-in |
+| Opt In | `msdyn_gdproptout` | BIT | N | R/W | Marketing opt-in |
 | **Main Address** | **`bshcs_mainaddressid`** | **LOOKUP → msdyn_functionallocation** | N | R/W | **NEW in v2 — 1:N relationship with Functional Location** |
 | Gender | `gendercode` | CHOICE | N | R/W | Male (1), Female (2) |
 | Birthday | `birthdate` | DATE ONLY | N | R/W | |
